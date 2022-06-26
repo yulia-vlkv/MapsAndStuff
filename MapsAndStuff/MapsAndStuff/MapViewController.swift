@@ -7,7 +7,6 @@
 
 import UIKit
 import MapKit
- 
 
 
 final class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate  {
@@ -22,8 +21,13 @@ final class MapViewController: UIViewController, CLLocationManagerDelegate, MKMa
         return map
     }()
     
-    private var pinArray: [MKAnnotation] = []
-    
+    private lazy var compass: MKCompassButton = {
+        let compass = MKCompassButton(mapView: mapView)
+        compass.compassVisibility = .visible
+        compass.translatesAutoresizingMaskIntoConstraints = false
+        return compass
+    }()
+
     private lazy var locationManager = CLLocationManager()
     
     override func loadView() {
@@ -33,24 +37,14 @@ final class MapViewController: UIViewController, CLLocationManagerDelegate, MKMa
         setupMapView()
         configureMapView()
         checkUserLocationPermissions()
+        showStoredAnnotations()
     }
 
-    private func setupMapView() {
-        view.addSubview(mapView)
-
-        NSLayoutConstraint.activate([
-            mapView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-    }
-    
     private func setupNavigationBar() {
         navigationController?.navigationBar.isHidden = false
         navigationItem.title = "Map"
         navigationController?.navigationBar.tintColor = CustomColors.setColor(style: .dustyTeal)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Remove All", style: .plain, target: self, action: #selector(removeAllPins))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Remove All", style: .plain, target: self, action: #selector(removeAllAnnotations))
         
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
@@ -58,9 +52,23 @@ final class MapViewController: UIViewController, CLLocationManagerDelegate, MKMa
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
     
-    @objc private func removeAllPins(){
+    @objc private func removeAllAnnotations(){
         self.mapView.removeAnnotations(mapView.annotations)
-        print("button pressed")
+    }
+    
+    private func setupMapView() {
+        view.addSubview(mapView)
+        mapView.addSubview(compass)
+
+        NSLayoutConstraint.activate([
+            mapView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            compass.topAnchor.constraint(equalTo: mapView.topAnchor, constant: 8),
+            compass.trailingAnchor.constraint(equalTo: mapView.trailingAnchor, constant: -8),
+        ])
     }
     
     @objc private func longPressed(sender: UILongPressGestureRecognizer){
@@ -80,11 +88,60 @@ final class MapViewController: UIViewController, CLLocationManagerDelegate, MKMa
                let title = tf.text {
                 annotation.title = title
                 self.mapView.addAnnotation(annotation)
+                
+                //To save annotations to UserDefaults
+                let newAnnotationDict = [
+                    "lat": newCoordinates.latitude,
+                    "lng": newCoordinates.longitude,
+                    "title": annotation.title
+                ] as [String : Any]
+                
+                var annotationsArray: [[String:Any]]!
+                var annotationsData = UserDefaults.standard.data(forKey: "StoredAnnotations")
+                if annotationsData == nil {
+                    annotationsArray = [newAnnotationDict]
+                } else {
+                    do {
+                        annotationsArray = try JSONSerialization.jsonObject(with: annotationsData!, options: []) as! [[String:Any]]
+                        annotationsArray.append(newAnnotationDict)
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                }
+                do {
+                    let jsonData = try JSONSerialization.data(withJSONObject: annotationsArray, options: .prettyPrinted)
+                    UserDefaults.standard.set(jsonData, forKey: "StoredAnnotations")
+                } catch {
+                    print(error.localizedDescription)
+                }
+                print(annotation.coordinate.latitude, annotation.coordinate.longitude)
             } else {
-                print("Can't add a pin")
+                print("Can't add an annotation")
             }
         })
         navigationController?.present(alert, animated: true)
+    }
+    
+    private func showStoredAnnotations(){
+        //Get annotations from UserDefaults
+        if UserDefaults.standard.data(forKey: "StoredAnnotations") != nil {
+            var storedAnnotationObjects = [MKPointAnnotation]()
+            do {
+                let storedAnnotationsData = UserDefaults.standard.data(forKey: "StoredAnnotations")!
+                let storedAnnotationsArray = try JSONSerialization.jsonObject(with: storedAnnotationsData, options: []) as! [[String:Any]]
+                for dict in storedAnnotationsArray {
+                    let newAnnotation = MKPointAnnotation()
+                    newAnnotation.coordinate = CLLocationCoordinate2D(latitude: dict["lat"] as! CGFloat, longitude: dict["lng"] as! CGFloat)
+                    newAnnotation.title = dict["title"] as! String
+                    storedAnnotationObjects.append(newAnnotation)
+                }
+                for annotation in storedAnnotationObjects {
+                    self.mapView.addAnnotation(annotation)
+                }
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
     }
     
     private func configureMapView() {
@@ -97,10 +154,11 @@ final class MapViewController: UIViewController, CLLocationManagerDelegate, MKMa
         let region = MKCoordinateRegion(center: centerCoordinates, latitudinalMeters: 1000, longitudinalMeters: 1000)
         mapView.setRegion(region, animated: true)
         
-        mapView.showsTraffic = true
-        
+        mapView.showsTraffic = false
+        mapView.isZoomEnabled = true
+        mapView.showsCompass = false
+        mapView.showsScale = true
         mapView.showsUserLocation = true
-//        print(mapView.selectedAnnotations.description)
     }
     
     private func checkUserLocationPermissions() {
@@ -157,19 +215,15 @@ final class MapViewController: UIViewController, CLLocationManagerDelegate, MKMa
                 guard let self = self else {
                     return
                 }
-
                 guard let response = response else {
                     if let error = error {
                         print("Error: \(error)")
                     }
-
                     return
                 }
-
                 let route = response.routes[0]
                 self.mapView.delegate = self
                 self.mapView.addOverlay(route.polyline, level: .aboveRoads)
-
                 let rect = route.polyline.boundingMapRect
                 self.mapView.setRegion(MKCoordinateRegion(rect), animated: true)
             }
