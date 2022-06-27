@@ -148,10 +148,10 @@ final class MapViewController: UIViewController, CLLocationManagerDelegate, MKMa
         
         mapView.mapType = .hybrid
         
-        let centerCoordinates = CLLocationCoordinate2D(latitude: 42.2845927, longitude: 18.8828971)
-        mapView.setCenter(centerCoordinates, animated: true)
+        let centerCoordinates = locationManager.location?.coordinate
+        mapView.setCenter(centerCoordinates ?? CLLocationCoordinate2D(latitude: 0, longitude: 0), animated: true)
         
-        let region = MKCoordinateRegion(center: centerCoordinates, latitudinalMeters: 1000, longitudinalMeters: 1000)
+        let region = MKCoordinateRegion(center: centerCoordinates ?? CLLocationCoordinate2D(latitude: 0, longitude: 0), latitudinalMeters: 1000, longitudinalMeters: 1000)
         mapView.setRegion(region, animated: true)
         
         mapView.showsTraffic = false
@@ -199,10 +199,10 @@ final class MapViewController: UIViewController, CLLocationManagerDelegate, MKMa
         let directionRequest = MKDirections.Request()
         directionRequest.transportType = .automobile
 
-        let sourcePlaceMark = MKPlacemark(coordinate: view.annotation?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0) )
+        let sourcePlaceMark = MKPlacemark(coordinate: locationManager.location?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0))
         let sourceMapItem = MKMapItem(placemark: sourcePlaceMark)
 
-        let destinationPlaceMark = MKPlacemark(coordinate: locationManager.location?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0))
+        let destinationPlaceMark =  MKPlacemark(coordinate: view.annotation?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0) )
         let destinationMapItem = MKMapItem(placemark: destinationPlaceMark)
         
         let alert = UIAlertController(title: "Draw a route?", message: "", preferredStyle: .alert)
