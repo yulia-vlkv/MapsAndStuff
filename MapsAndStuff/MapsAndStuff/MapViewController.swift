@@ -54,6 +54,7 @@ final class MapViewController: UIViewController, CLLocationManagerDelegate, MKMa
     
     @objc private func removeAllAnnotations(){
         self.mapView.removeAnnotations(mapView.annotations)
+        UserDefaults.standard.removeObject(forKey: "StoredAnnotations")
     }
     
     private func setupMapView() {
