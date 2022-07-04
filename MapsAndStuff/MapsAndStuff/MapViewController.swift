@@ -11,6 +11,13 @@ import MapKit
 
 final class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate  {
     
+    private func updatePinCountLabel() {
+        let pinCount = self.mapView.annotations.filter{$0 is MKPointAnnotation}.count
+        let localized = NSLocalizedString("pins_count", comment: "")
+        let formatted = String.localizedStringWithFormat(localized, pinCount)
+        pinCountLabel.text = formatted
+    }
+    
     private lazy var mapView: MKMapView = {
         let map = MKMapView()
         let uiLongPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressed))
@@ -19,6 +26,18 @@ final class MapViewController: UIViewController, CLLocationManagerDelegate, MKMa
         map.translatesAutoresizingMaskIntoConstraints = false
         map.delegate = self
         return map
+    }()
+    
+    private lazy var pinCountLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 18, weight: .bold)
+        label.textAlignment = .center
+        label.textColor = .white
+        label.shadowColor = .black
+        label.layer.shadowRadius = 3
+        label.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     private lazy var compass: MKCompassButton = {
@@ -38,13 +57,17 @@ final class MapViewController: UIViewController, CLLocationManagerDelegate, MKMa
         configureMapView()
         checkUserLocationPermissions()
         showStoredAnnotations()
+        updatePinCountLabel()
     }
 
     private func setupNavigationBar() {
         navigationController?.navigationBar.isHidden = false
-        navigationItem.title = "Map"
+        navigationItem.title = "main_title".localized
         navigationController?.navigationBar.tintColor = CustomColors.setColor(style: .dustyTeal)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Remove All", style: .plain, target: self, action: #selector(removeAllAnnotations))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "navigation_bar_remove_button".localized,
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(removeAllAnnotations))
         
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
@@ -55,11 +78,13 @@ final class MapViewController: UIViewController, CLLocationManagerDelegate, MKMa
     @objc private func removeAllAnnotations(){
         self.mapView.removeAnnotations(mapView.annotations)
         UserDefaults.standard.removeObject(forKey: "StoredAnnotations")
+        self.updatePinCountLabel()
     }
     
     private func setupMapView() {
         view.addSubview(mapView)
         mapView.addSubview(compass)
+        mapView.addSubview(pinCountLabel)
 
         NSLayoutConstraint.activate([
             mapView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -69,6 +94,12 @@ final class MapViewController: UIViewController, CLLocationManagerDelegate, MKMa
             
             compass.topAnchor.constraint(equalTo: mapView.topAnchor, constant: 8),
             compass.trailingAnchor.constraint(equalTo: mapView.trailingAnchor, constant: -8),
+            compass.leadingAnchor.constraint(equalTo: pinCountLabel.trailingAnchor, constant: 50),
+            
+            pinCountLabel.topAnchor.constraint(equalTo: mapView.topAnchor, constant: 16),
+            pinCountLabel.leadingAnchor.constraint(equalTo: mapView.leadingAnchor),
+            pinCountLabel.heightAnchor.constraint(equalToConstant: 50),
+            pinCountLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 300)
         ])
     }
     
@@ -78,17 +109,18 @@ final class MapViewController: UIViewController, CLLocationManagerDelegate, MKMa
         let annotation = MKPointAnnotation()
         annotation.coordinate = newCoordinates
         
-        let alert = UIAlertController(title: "Add pin", message: "Enter title", preferredStyle: .alert)
+        let alert = UIAlertController(title: "annotation_alert_title".localized, message: "annotation_alert_text".localized, preferredStyle: .alert)
         alert.addTextField() { newTextField in
-            newTextField.placeholder = "My favourite place"
+            newTextField.placeholder = "annotation_alert_placeholder".localized
         }
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Ok", style: .default) { _ in
+        alert.addAction(UIAlertAction(title: "annotation_alert_cancel_action".localized, style: .cancel))
+        alert.addAction(UIAlertAction(title: "annotation_alert_OK_action".localized, style: .default) { _ in
             if let textFields = alert.textFields,
                let tf = textFields.first,
                let title = tf.text {
                 annotation.title = title
                 self.mapView.addAnnotation(annotation)
+                self.updatePinCountLabel()
                 
                 //To save annotations to UserDefaults
                 let newAnnotationDict = [
@@ -138,6 +170,7 @@ final class MapViewController: UIViewController, CLLocationManagerDelegate, MKMa
                 }
                 for annotation in storedAnnotationObjects {
                     self.mapView.addAnnotation(annotation)
+                    updatePinCountLabel()
                 }
             } catch {
                 print(error.localizedDescription)
@@ -175,7 +208,7 @@ final class MapViewController: UIViewController, CLLocationManagerDelegate, MKMa
             mapView.showsUserLocation = true
             
         case .denied, .restricted:
-            let alert = UIAlertController(title: "Permission", message: "Please allow the app to use your location", preferredStyle: UIAlertController.Style.alert)
+            let alert = UIAlertController(title: "alert_title".localized, message: "alert_message".localized, preferredStyle: UIAlertController.Style.alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
             
@@ -206,9 +239,9 @@ final class MapViewController: UIViewController, CLLocationManagerDelegate, MKMa
         let destinationPlaceMark =  MKPlacemark(coordinate: view.annotation?.coordinate ?? CLLocationCoordinate2D(latitude: 0, longitude: 0) )
         let destinationMapItem = MKMapItem(placemark: destinationPlaceMark)
         
-        let alert = UIAlertController(title: "Draw a route?", message: "", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "nope", style: .cancel))
-        alert.addAction(UIAlertAction(title: "yep", style: .default) { _ in
+        let alert = UIAlertController(title: "route_alert_title".localized, message: "", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "route_alert_no_action".localized, style: .cancel))
+        alert.addAction(UIAlertAction(title: "route_alert_yes_action".localized, style: .default) { _ in
             directionRequest.source = sourceMapItem
             directionRequest.destination = destinationMapItem
             let directions = MKDirections(request: directionRequest)
@@ -240,3 +273,8 @@ final class MapViewController: UIViewController, CLLocationManagerDelegate, MKMa
 
 }
 
+extension String {
+    var localized: String {
+        NSLocalizedString(self, comment: "")
+    }
+}

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EF1A21EF2871E4CF003AA3C8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EF1A21F12871E4CF003AA3C8 /* InfoPlist.strings */; };
+		EF1A21F52871E52B003AA3C8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = EF1A21F72871E52B003AA3C8 /* Localizable.strings */; };
+		EF1A21FB2872F7F5003AA3C8 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = EF1A21FD2872F7F5003AA3C8 /* Localizable.stringsdict */; };
 		EFB0D4CD28682C2000534643 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB0D4CC28682C2000534643 /* AppDelegate.swift */; };
 		EFB0D4CF28682C2000534643 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB0D4CE28682C2000534643 /* SceneDelegate.swift */; };
 		EFB0D4D128682C2000534643 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB0D4D028682C2000534643 /* MapViewController.swift */; };
@@ -16,6 +19,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		EF1A21EC2871E4A9003AA3C8 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		EF1A21F02871E4CF003AA3C8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		EF1A21F22871E4D0003AA3C8 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		EF1A21F62871E52B003AA3C8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		EF1A21F82871E52E003AA3C8 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		EF1A21FC2872F7F5003AA3C8 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		EF1A21FE2872FC8D003AA3C8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		EFB0D4C928682C2000534643 /* MapsAndStuff.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapsAndStuff.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFB0D4CC28682C2000534643 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EFB0D4CE28682C2000534643 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -63,6 +73,9 @@
 				EFB0D4D528682C2200534643 /* Assets.xcassets */,
 				EFB0D4D728682C2200534643 /* LaunchScreen.storyboard */,
 				EFB0D4DA28682C2200534643 /* Info.plist */,
+				EF1A21F12871E4CF003AA3C8 /* InfoPlist.strings */,
+				EF1A21F72871E52B003AA3C8 /* Localizable.strings */,
+				EF1A21FD2872F7F5003AA3C8 /* Localizable.stringsdict */,
 			);
 			path = MapsAndStuff;
 			sourceTree = "<group>";
@@ -109,6 +122,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = EFB0D4C028682C2000534643;
 			productRefGroup = EFB0D4CA28682C2000534643 /* Products */;
@@ -126,6 +140,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				EFB0D4D928682C2200534643 /* LaunchScreen.storyboard in Resources */,
+				EF1A21F52871E52B003AA3C8 /* Localizable.strings in Resources */,
+				EF1A21EF2871E4CF003AA3C8 /* InfoPlist.strings in Resources */,
+				EF1A21FB2872F7F5003AA3C8 /* Localizable.stringsdict in Resources */,
 				EFB0D4D628682C2200534643 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -147,10 +164,38 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		EF1A21F12871E4CF003AA3C8 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EF1A21F02871E4CF003AA3C8 /* en */,
+				EF1A21F22871E4D0003AA3C8 /* ru */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		EF1A21F72871E52B003AA3C8 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EF1A21F62871E52B003AA3C8 /* en */,
+				EF1A21F82871E52E003AA3C8 /* ru */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		EF1A21FD2872F7F5003AA3C8 /* Localizable.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EF1A21FC2872F7F5003AA3C8 /* ru */,
+				EF1A21FE2872FC8D003AA3C8 /* en */,
+			);
+			name = Localizable.stringsdict;
+			sourceTree = "<group>";
+		};
 		EFB0D4D728682C2200534643 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				EFB0D4D828682C2200534643 /* Base */,
+				EF1A21EC2871E4A9003AA3C8 /* ru */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -162,6 +207,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -222,6 +268,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";

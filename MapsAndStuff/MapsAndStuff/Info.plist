@@ -4,8 +4,6 @@
 <dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Pls allow us to use your locations</string>
-	<key>NSLocationUsageDescription</key>
-	<string>Pls allow us to use your locations</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
