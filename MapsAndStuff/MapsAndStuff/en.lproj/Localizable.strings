@@ -1,0 +1,21 @@
+/* 
+  Localizable.strings
+  MapsAndStuff
+
+  Created by Iuliia Volkova on 03.07.2022.
+  
+*/
+
+
+"main_title" = "Map";
+"navigation_bar_remove_button" = "Remove All";
+"alert_title" = "Permission";
+"alert_message" = "Please allow the app to use your location";
+"route_alert_title" = "Draw a route?";
+"route_alert_yes_action" = "yep";
+"route_alert_no_action" = "nope";
+"annotation_alert_title" = "Add pin";
+"annotation_alert_text" = "Enter title";
+"annotation_alert_placeholder" = "My favourite place";
+"annotation_alert_OK_action" = "OK";
+"annotation_alert_cancel_action" = "Cancel";

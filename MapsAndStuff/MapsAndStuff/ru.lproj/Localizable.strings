@@ -1,0 +1,22 @@
+/* 
+  Localizable.strings
+  MapsAndStuff
+
+  Created by Iuliia Volkova on 03.07.2022.
+  
+*/
+
+
+"main_title" = "Карта";
+"navigation_bar_remove_button" = "Удалить все";
+"alert_title" = "Доступ";
+"alert_message" = "Пожалуйста, разрешите доступ к вашей геолокации";
+"route_alert_title" = "Построить маршрут?";
+"route_alert_yes_action" = "ага";
+"route_alert_no_action" = "неа";
+"annotation_alert_title" = "Добавить точку";
+"annotation_alert_text" = "Введите название";
+"annotation_alert_placeholder" = "Мое любимое место";
+"annotation_alert_OK_action" = "OK";
+"annotation_alert_cancel_action" = "Отмена";
+
