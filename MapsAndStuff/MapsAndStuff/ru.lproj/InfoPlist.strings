@@ -1,0 +1,10 @@
+/* 
+  InfoPlist.strings
+  MapsAndStuff
+
+  Created by Iuliia Volkova on 03.07.2022.
+  
+*/
+
+
+NSLocationWhenInUseUsageDescription = "Пжлста, разрешите доступ к вашей геолокации";

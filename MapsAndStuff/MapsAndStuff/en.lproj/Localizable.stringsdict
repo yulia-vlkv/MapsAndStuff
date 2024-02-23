@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>pins_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@number_of_pins@</string>
+		<key>number_of_pins</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>no pins</string>
+			<key>one</key>
+			<string>%d pin</string>
+			<key>two</key>
+			<string>%d pins</string>
+			<key>few</key>
+			<string>%d pins</string>
+			<key>many</key>
+			<string>%d pins</string>
+			<key>other</key>
+			<string>%d pins</string>
+		</dict>
+	</dict>
+</dict>
+</plist>
